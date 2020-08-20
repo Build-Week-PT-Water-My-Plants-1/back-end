@@ -6,10 +6,10 @@ const db = require("../data/dbConfig");
 const secrets = require("../config/secret");
 
 router.post("/register", async (req, res) => {
-  const userInfo = req.body;
+  const user = req.body;
 
   try {
-    const data = await db("users").insert(userInfo);
+    const data = await db("users").insert(user);
     res.status(201).json(data);
   } catch (error) {
     console.log(error);
