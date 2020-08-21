@@ -9,6 +9,7 @@ exports.up = function(knex) {
         tbl.text('password')
             .notNullable()
         tbl.text('phonenumber')
+            .unique()
             .notNullable()
     })
     .createTable('plants', tbl => {
