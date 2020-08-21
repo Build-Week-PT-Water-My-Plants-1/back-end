@@ -16,7 +16,7 @@ router.post("/register", async (req, res) => {
       const data = await db("users").where({ id: user }).select("username", "phonenumber").first();
       res.status(201).json(data);
     } else {
-      res.status(500).json({ err: "must include username, password, and phone number" });
+      res.status(400).json({ err: "must include username, password, and phone number" });
     }
   } catch (error) {
     console.log(error);
@@ -30,9 +30,9 @@ router.post("/login", async (req, res) => {
     const user = await db("users").where({ username }).first();
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = generateToken(user);
-      res.status(500).json({ message: `${username} logged in`, jwt: token });
+      res.status(200).json({ message: `${username} logged in`, jwt: token });
     } else {
-      res.status(500).json({ err: "invalid username and password" });
+      res.status(400).json({ err: "invalid username and password" });
     }
   } catch (error) {
     console.log(error);
