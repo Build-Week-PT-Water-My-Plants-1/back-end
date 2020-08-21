@@ -12,8 +12,11 @@ router.post("/register", async (req, res) => {
     if (userInfo.username && userInfo.password && userInfo.phonenumber) {
       const hash = bcrypt.hashSync(userInfo.password, 10);
       userInfo.password = hash;
-      const user = await db("users").insert(userInfo);
-      const data = await db("users").where({ id: user }).select("username", "phonenumber").first();
+      const user = await db("users").insert(userInfo, ["id"]);
+      const data = await db("users")
+        .where({ id: user })
+        .select("id", "username", "phonenumber")
+        .first();
       res.status(201).json(data);
     } else {
       res.status(400).json({ err: "must include username, password, and phone number" });
