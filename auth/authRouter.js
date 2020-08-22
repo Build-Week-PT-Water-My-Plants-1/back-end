@@ -12,7 +12,7 @@ router.post("/register", async (req, res) => {
     if (userInfo.username && userInfo.password && userInfo.phonenumber) {
       const hash = bcrypt.hashSync(userInfo.password, 10);
       userInfo.password = hash;
-      const user = await db("users").insert(userInfo, ["id"]);
+      const user = await db("users").insert(userInfo).returning("id");
       const data = await db("users")
         .where({ id: user })
         .select("id", "username", "phonenumber")
