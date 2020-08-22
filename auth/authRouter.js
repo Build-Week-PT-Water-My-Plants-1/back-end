@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const db = require("../data/dbConfig");
+const users = require("./authModel")
 const secrets = require("../config/secrets");
 
 router.post("/register", async (req, res) => {
@@ -12,6 +13,7 @@ router.post("/register", async (req, res) => {
     if (userInfo.username && userInfo.password && userInfo.phonenumber) {
       const hash = bcrypt.hashSync(userInfo.password, 10);
       userInfo.password = hash;
+
       const user = await db("users").insert(userInfo).returning("id");
       // console.log("user ", user);
       const data = await db("users")
@@ -31,7 +33,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await db("users").where({ username }).first();
+    const user = await users.findByUsername(username);
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = generateToken(user);
       res.status(200).json({ message: `${username} logged in`, jwt: token, user: user });
