@@ -32,9 +32,11 @@ router.post("/:id", async (req, res) => {
     if (valid.length > 0) {
       const plantInfo = req.body;
       plantInfo.user_id = id;
-      const newPlant = await plants.add(plantInfo);
-      //const data = await db("plants").where({ id: plantId }).first();
-      res.status(201).json(newPlant);
+
+      const plantId = await db("plants").insert(plantInfo).returning("id");
+      const data = await db("plants").where({ id: plantId }).first();
+      res.status(201).json(data);
+
     } else {
       res.status(400).json({ error: "invalid user id" });
     }
