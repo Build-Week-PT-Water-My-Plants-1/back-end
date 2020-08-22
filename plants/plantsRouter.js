@@ -47,8 +47,8 @@ router.put("/:id", async (req, res) => {
     const valid = await db("plants").where({ id });
     if (valid.length > 0) {
       const newInfo = req.body;
-      await db("plants").update(newInfo).where({ id }).returning("id");
-      const data = await db("plants").where({ id }).first();
+      const plantId = await db("plants").update(newInfo).where({ id }).returning("id");
+      const data = await db("plants").where({ id: plantId[0] }).first();
       res.status(200).json({ updated: data });
     } else {
       res.status(400).json({ error: "invalid plant id" });
