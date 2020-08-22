@@ -29,7 +29,7 @@ router.post("/:id", async (req, res) => {
     if (valid.length > 0) {
       const plantInfo = req.body;
       plantInfo.user_id = id;
-      const plantId = await db("plants").insert(plantInfo);
+      const plantId = await db("plants").insert(plantInfo).returning("id");
       const data = await db("plants").where({ id: plantId }).first();
       res.status(201).json(data);
     } else {
