@@ -1,5 +1,8 @@
 const router = require("express").Router();
+
+const plants = require('./plantsModel')
 const db = require("../data/dbConfig");
+const { findById } = require("../auth/authModel");
 
 router.get("/", async (req, res) => {
   const data = await db("plants");
@@ -9,9 +12,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const valid = await db("users").where({ id });
+    const valid = await plants.findUserById(id);
     if (valid.length > 0) {
-      const data = await db("plants").where({ user_id: id });
+      const data = await plants.findPlantsByUserId(id);
       res.status(200).json(data);
     } else {
       res.status(400).json({ error: "user_id not found" });
@@ -25,13 +28,15 @@ router.get("/:id", async (req, res) => {
 router.post("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const valid = await db("users").where({ id });
+    const valid = await plants.findUserById(id);
     if (valid.length > 0) {
       const plantInfo = req.body;
       plantInfo.user_id = id;
+
       const plantId = await db("plants").insert(plantInfo).returning("id");
       const data = await db("plants").where({ id: plantId }).first();
       res.status(201).json(data);
+
     } else {
       res.status(400).json({ error: "invalid user id" });
     }
@@ -44,12 +49,11 @@ router.post("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const valid = await db("plants").where({ id });
+    const valid = await plants.findById(id);
     if (valid.length > 0) {
       const newInfo = req.body;
-      await db("plants").update(newInfo).where({ id });
-      const data = await db("plants").where({ id }).first();
-      res.status(200).json({ updated: data });
+      const updated = await plants.update(newInfo, id);
+      res.status(200).json({ updated: updated });
     } else {
       res.status(400).json({ error: "invalid plant id" });
     }
@@ -64,8 +68,8 @@ router.delete("/:id", async (req, res) => {
   try {
     const valid = await db("plants").where({ id });
     if (valid.length > 0) {
-      const plantData = await db("plants").where({ id }).first();
-      const data = await db("plants").where({ id }).del();
+      const plantData = await plants.findById(id);
+      const data = await plants.remove(id);
       res.status(200).json({ deleted: plantData });
     } else {
       res.status(400).json({ error: "invalid plant id" });
