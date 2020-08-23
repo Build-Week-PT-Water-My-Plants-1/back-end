@@ -9,6 +9,8 @@
 | GET     | /                    | get status of api if up                               |
 | POST    | api/auth/register    | register as a new user                                |
 | POST    | api/auth/login       | login as an existing user                             |
+| PUT     | api/user/:id         | update an existing user                               |
+| DELETE  | api/user/:id         | delete an existing user                               |
 | GET     | api/plants           | get all plants                                        |
 | GET     | api/plants/:id       | get all plants where id is user_id                    |
 | POST    | api/plants/:id       | create a new plant where id is user_id                |
