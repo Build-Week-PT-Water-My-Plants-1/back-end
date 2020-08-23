@@ -4,6 +4,7 @@ module.exports = {
   findById,
   register,
   findByUsername,
+  findByPhonenumber,
   update,
   remove,
 };
@@ -20,7 +21,7 @@ function findById(id) {
 //     });
 // }
 
-const register = async (userInfo) => {
+async function register (userInfo) {
   const userId = await db("users").insert(userInfo).returning("id");
   const data = await findById(userId[0]);
   return data;
@@ -30,13 +31,17 @@ function findByUsername(username) {
   return db("users").where({ username }).first();
 }
 
-const update = async (user) => {
+function findByPhonenumber(phonenumber){
+  return db('users').where({ phonenumber }).first();
+}
+
+async function update (user) {
   const userId = await db("users").where({ id: user.id }).insert(user).returning("id");
   const data = await findById(userId[0]);
   return data;
 };
 
-const remove = async (id) => {
+async function remove (id) {
   const userInfo = await findById(id);
   await db("users").where({ id }).del();
   return userInfo;

@@ -34,7 +34,7 @@ function findPlantsByUserId(user_id) {
 //     });
 // }
 
-const add = async (plantInfo) => {
+async function add (plantInfo) {
   const plantId = await db("plants").insert(plantInfo).returning("id");
   const data = await findPlantById(plantId[0]).first();
   return data;
@@ -49,7 +49,7 @@ const add = async (plantInfo) => {
 //     });
 // }
 
-const update = async (newInfo, id) => {
+async function update (newInfo, id) {
   const plantId = await db("plants").where({ id }).update(newInfo).returning("id");
   return await findPlantById(plantId[0]);
 };
