@@ -35,9 +35,12 @@ function findByPhonenumber(phonenumber){
   return db('users').where({ phonenumber }).first();
 }
 
-async function update (user) {
-  const userId = await db("users").where({ id: user.id }).insert(user).returning("id");
-  const data = await findById(userId[0]);
+async function update (newInfo, id) {
+  const original = await findById(id)
+  const updated = {...original, ...newInfo}
+  console.log("from authmodel: ", updated)
+  const userId = await db("users").where({ id }).update(updated).returning("id");
+  const data = await findById(id);
   return data;
 };
 
