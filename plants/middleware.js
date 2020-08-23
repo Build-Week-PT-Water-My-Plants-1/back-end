@@ -15,10 +15,10 @@ function validatePlant(req, res, next){
   }
 };
 
-async function validateId(req, res, next){
+async function validateId(req, res, next){   
   const {id} = req.params
   try {
-    const valid = await plants.findById(id)
+    const valid = await plants.findPlantById(id)
     if (valid){
       next()
     } else {
