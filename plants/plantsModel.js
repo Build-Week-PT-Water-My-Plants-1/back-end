@@ -1,6 +1,7 @@
 const db = require("../data/dbConfig");
 
 module.exports = {
+  findAllPlants,
   findUserById,
   findPlantById,
   findPlantsByUserId,
@@ -13,6 +14,10 @@ module.exports = {
 // const findBy = (id, db) => {
 //   db(db).where({ id });
 // };
+
+function findAllPlants(){
+  return db('plants')
+}
 
 function findUserById(id) {
   return db("users").where({ id }).first();

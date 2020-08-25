@@ -2,11 +2,11 @@ const router = require("express").Router()
 
 const plants = require("./plantsModel")
 
-const userMiddleware = require("../auth/middleware")
-const plantsMiddleware = require("./middleware")
+const userMiddleware = require("../auth/usersMiddleware")
+const plantsMiddleware = require("./plantsMiddleware")
 
 router.get("/", async (req, res) => {
-  const data = await db("plants")
+  const data = await plants.findAllPlants()
   res.status(200).json(data)
 })
 

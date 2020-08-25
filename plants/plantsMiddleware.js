@@ -1,4 +1,3 @@
-const db = require('./plantsModel');
 const plants = require('./plantsModel')
 
 module.exports = {
