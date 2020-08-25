@@ -114,3 +114,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#ignore the db3 files
+data/database_file.db3
+data/testdb.db3

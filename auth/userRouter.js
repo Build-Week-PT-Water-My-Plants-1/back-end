@@ -1,9 +1,8 @@
 const router = require("express").Router();
 
 const user = require('./authModel')
-const userMiddleware = require('./middleware')
 
-router.put("/:id", userMiddleware.validateId, async (req, res) => {
+router.put("/:id", async (req, res) => {
     const { id } = req.params;
     const newInfo = req.body;
   
@@ -17,7 +16,7 @@ router.put("/:id", userMiddleware.validateId, async (req, res) => {
         
   }); 
 
-router.delete("/:id", userMiddleware.validateId, async (req, res) => {
+router.delete("/:id", async (req, res) => {
     const { id } = req.params
 
     try{

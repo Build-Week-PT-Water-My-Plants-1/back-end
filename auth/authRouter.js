@@ -6,9 +6,9 @@ const db = require("../data/dbConfig");
 const users = require("./authModel")
 const secrets = require("../config/secrets");
 
-const usersMiddleware = require('./middleware')
+const { validateUser } = require('./usersMiddleware')
 
-router.post("/register", usersMiddleware.validateUser, async (req, res) => {
+router.post("/register", validateUser, async (req, res) => {
   const userInfo = req.body;
   try {
     
