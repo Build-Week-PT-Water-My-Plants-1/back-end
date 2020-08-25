@@ -6,24 +6,18 @@ const db = require("../data/dbConfig");
 const users = require("./authModel")
 const secrets = require("../config/secrets");
 
-router.post("/register", async (req, res) => {
-  const userInfo = req.body;
+const usersMiddleware = require('./middleware')
 
+router.post("/register", usersMiddleware.validateUser, async (req, res) => {
+  const userInfo = req.body;
   try {
-    if (userInfo.username && userInfo.password && userInfo.phonenumber) {
+    
       const hash = bcrypt.hashSync(userInfo.password, 10);
       userInfo.password = hash;
 
-      const user = await db("users").insert(userInfo).returning("id");
-      // console.log("user ", user);
-      const data = await db("users")
-        .where({ id: Number(user) })
-        .select("id", "username", "phonenumber")
-        .first();
+      const data = await users.register(userInfo);
       res.status(201).json(data);
-    } else {
-      res.status(400).json({ err: "must include username, password, and phone number" });
-    }
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ err: "problem registering user" });

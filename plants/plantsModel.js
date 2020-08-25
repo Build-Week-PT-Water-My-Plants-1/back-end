@@ -34,9 +34,9 @@ function findPlantsByUserId(user_id) {
 //     });
 // }
 
-const add = async (plantInfo) => {
+async function add (plantInfo) {
   const plantId = await db("plants").insert(plantInfo).returning("id");
-  const data = await findPlantById(plantId[0]).first();
+  const data = await findPlantById(plantId[0]);
   return data;
 };
 
@@ -49,12 +49,15 @@ const add = async (plantInfo) => {
 //     });
 // }
 
-const update = async (newInfo, id) => {
-  const plantId = await db("plants").where({ id }).update(newInfo).returning("id");
-  return await findPlantById(plantId[0]);
+async function update (newInfo, id) {
+  const original = await findPlantById(id)
+  const updated = {...original, ...newInfo}
+  const plantId = await db("plants").where({ id }).update(updated).returning("id");
+  return await findPlantById(id);
 };
 
 async function remove(id) {
-  const plantData = await plants.findById(id);
-  return db("plants").where({ id: plantData[0] }).del();
+  const plantData = await findPlantById(id);
+  await db("plants").where({ id }).del();
+  return plantData
 }
