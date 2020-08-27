@@ -16,16 +16,18 @@ function validateUser(req, res, next) {
 }
 
 async function validateId(req, res, next) {
-  const { id } = req.params;
+  const id = req.url.match(/\d*/g)[1];
+  // console.log("id", id);
   try {
     const valid = await users.findById(id);
+    // console.log("valid", valid);
     if (valid) {
       next();
     } else {
       res.status(400).json({ error: "invalid user id" });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ error: "problem validating user id" });
   }
 }
