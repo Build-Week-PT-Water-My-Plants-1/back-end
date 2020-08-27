@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const db = require("../data/dbConfig");
-const users = require("./authModel")
+const users = require("./authModel");
 const secrets = require("../config/secrets");
 
 const { validateUser, isUnique } = require('./usersMiddleware')
@@ -11,16 +11,14 @@ const { validateUser, isUnique } = require('./usersMiddleware')
 router.post("/register", validateUser, isUnique, async (req, res) => {
   const userInfo = req.body;
   try {
-    
-      const hash = bcrypt.hashSync(userInfo.password, 10);
-      userInfo.password = hash;
+    const hash = bcrypt.hashSync(userInfo.password, 10);
+    userInfo.password = hash;
 
-      const data = await users.register(userInfo);
-      res.status(201).json(data);
-
+    const data = await users.register(userInfo);
+    res.status(201).json(data);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ err: "problem registering user" });
+    res.status(500).json({ error: "problem registering user" });
   }
 });
 
@@ -32,11 +30,11 @@ router.post("/login", async (req, res) => {
       const token = generateToken(user);
       res.status(200).json({ message: `${username} logged in`, jwt: token, user: user });
     } else {
-      res.status(400).json({ err: "invalid username and password" });
+      res.status(400).json({ error: "invalid username and password" });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ err: "problem logging in" });
+    res.status(500).json({ error: "problem logging in" });
   }
 });
 
