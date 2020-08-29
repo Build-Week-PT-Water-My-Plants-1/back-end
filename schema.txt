@@ -1,6 +1,3 @@
-# back-end
-
-
 |Base URL for Deployed API| https://watercan-io-bw.herokuapp.com/
 
 |Endpoints|
